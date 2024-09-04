@@ -1,20 +1,42 @@
-maze = [ [0, 1, 1, 0, 0], #0
-         [0, 0, 0, 1, 0], #1
-         [0, 1, 0, 1, -1], #2
-         [0, 1, 1, 1, 0], #3
-         [0, 0, 0, 0, 0] ] #4
+import time
+import timeit
+
+import Mazegenerator
+from colorama import Fore, Style, init
+
+
+maze_gen = Mazegenerator.MazeGenerator(20, 20)
+maze = maze_gen.generate_maze(0,0)
 
 def print_maze():
     for row in maze:
-        print(row)
+        for index in row:
+            if index == 1:
+                print(Fore.RED + "|", end =" ")
+            if index == 0:
+                print(Fore.LIGHTCYAN_EX + " ", end =" ")
+            if index == 2:
+                print(Fore.GREEN + "2", end =" ")
+            if index == 3:
+                print(Fore.YELLOW + "3", end=" ")
+            if index == "x":
+                print(Fore.RED + "x", end=" ")
+        print()
+        print()
+    print(Fore.BLACK + "_______________________________________________")
     print()
 
+generate = input("Enter anything to generate a maze: ")
+print_maze()
+solve = input(Fore.BLACK + "Enter anything to solve the maze: ")
 column = 0 # x
 row = 0 # y
+'''
 def move_up():
     global row
     row -= 1
     maze[row][column] = 2
+    time.sleep(5)
     print_maze()
 
 def move_down():
@@ -34,14 +56,18 @@ def move_right():
     column += 1
     maze[row][column] = 2
     print_maze()
-
+'''
 def solver(row, column):
-    if  row < 0 or column < 0 or row == 5 or column == 5 or maze[row][column] == 2 or maze[row][column] == 1:
+    if  row < 0 or column < 0 or row == len(maze) or column == len(maze[0]) or maze[row][column] == 2 or maze[row][column] == 1:
+
         return False
 
-    if maze[row][column] == -1:
+
+    if maze[row][column] == 3:
+        print(Fore.BLACK + "Finished")
         return True
     maze[row][column] += 2
+    time.sleep(.1)
     print_maze()
     # TRY to move in every direction
     if solver(row, column + 1) == True: #right
@@ -52,24 +78,7 @@ def solver(row, column):
         return True
     if solver(row - 1, column) == True:  # up
         return True
+
+    maze[row][column] = "x"
     return False
 solver(0,0)
-'''
-maze[row][column] = 2
-move_down()
-#0, 1 ||  #1, 0
-move_down()
-#0, 2 || #2, 0
-move_right()
-#1, 2 || #2, 1
-move_right()
-#2, 2 || #2, 2
-move_up()
-#2, 1 || #1, 2
-move_up()
-#2, 0 || #0, 2
-move_right()
-#3, 0 || #0, 3
-move_right()
-#4, 0 || #0, 4
-'''
